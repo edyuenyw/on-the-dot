@@ -25,7 +25,7 @@ function App() {
   return (
 
     <div className="App">
-      <Router>
+      <Router basename={ process.env.PUBLIC_URL }>
         <nav>
           <Link to="/activities">Activities</Link>
           &nbsp; | &nbsp;
@@ -46,7 +46,7 @@ function App() {
           </Route>
 
           <Route exact path="/tasks" component={ Tasks } />
-          
+
           { /*
             <Route exact path="/activities/search/:query" >
             <Activities
