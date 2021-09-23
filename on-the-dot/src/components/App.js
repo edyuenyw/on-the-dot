@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import { useState } from 'react'; // splitting it for index image slider
+import { useState } from 'react';
 
 import ActivitiesSearch from './ActivitiesSearch';
 import Activities from './Activities';
@@ -9,18 +9,12 @@ import Distance from './Distance';
 import './App.css';
 
 import activitiesData from './activitiesData';
+import tasksData from './tasksData';
 
 function App() {
 
-  // const tasksData = [
-  //   {
-  //     id: 1,
-  //     name: "Coffee",
-  //     duration: 5
-  //   }
-  // ];
-
   const [ activities, setActivities ] = useState( activitiesData );
+  const [ tasks, setTasks ] = useState( tasksData );
 
   return (
 
@@ -44,10 +38,16 @@ function App() {
               setActivities={ setActivities }
             />
           </Route>
+          <Route exact path="/activities/search/:query/:dateId">
+            <Tasks
+              tasks={ tasks }
+              setTasks={ setTasks }
+            />
+          </Route>
 
-          <Route exact path="/tasks" component={ Tasks } />
 
           { /*
+            <Route exact path="/tasks" component={ Tasks } />
             <Route exact path="/activities/search/:query" >
             <Activities
             activitiesData={ activitiesData }

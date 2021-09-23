@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-
-import activitiesData from './activitiesData';
+import { Link } from 'react-router-dom';
 
 const google = window.google;
-
 
 function Activities( props ) {
 
@@ -25,10 +23,7 @@ function Activities( props ) {
 
   useEffect( () => {
     console.log("Activities.useEffect() is running: ", props);
-
-
     performSearch( params.query );
-
   }, [ params.query ] );
 
 
@@ -36,7 +31,7 @@ function Activities( props ) {
     ev.preventDefault();
     console.log("Activities.handleSubmit() clicked.");
 
-    if ( activities.find( d => d.dateId === ev.target.dateId.value) ){
+    if ( props.activities.find( d => d.dateId === ev.target.dateId.value) ){
       return;
     }
       const service = new google.maps.DistanceMatrixService();
@@ -72,6 +67,7 @@ function Activities( props ) {
       )
   };
 
+
   const minDate = () => {
     let today = new Date();
     let dd = today.getDate();
@@ -102,7 +98,8 @@ function Activities( props ) {
         activities.map( (activity) =>
           <li key={ activity.dateId } >
             <h3>
-            Date: { activity.dateId }
+            Date: <Link to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`}
+              >{ activity.dateId }</Link>
             <br />
             Activity: { activity.activityName }
             <br />
