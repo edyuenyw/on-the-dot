@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-
-// need a list to show all Item being added here
-// useEffect to calculate new items being added the the default leave/arrival time
+import { useParams } from 'react-router-dom';
 
 function Tasks( props ) {
 
   const [ tasks, setTasks ] = useState( [] );
-
-  const params = useParams(); // params:{query: "work", dateId: "2021-09-23"}
+  const params = useParams();
 
   useEffect( () => {
     console.log("Tasks.useEffect() is running: ", params);
@@ -26,13 +22,13 @@ function Tasks( props ) {
 
     const theData = {
       id: Date.now(),
+      activityName: params.query,
       date: params.dateId,
       name: ev.target.taskName.value,
-      duration: ev.target.duration.value
+      duration: parseInt(ev.target.duration.value)
     }
     props.setTasks([ ...props.tasks, theData ]);
     setTasks([ ...tasks, theData ]);
-    // props.history.push(`/task/${ id }`);
 
   };
 
@@ -52,9 +48,8 @@ function Tasks( props ) {
         tasks.map( (task) =>
           <li key={ task.id } >
             <h3>
-              Task ID: { task.id } &nbsp;
               Date: { task.date } &nbsp;
-              Name: { task.name } &nbsp;
+              Task: { task.name } &nbsp;
               Duration: { task.duration } minutes
             </h3>
           </li>
@@ -67,9 +62,3 @@ function Tasks( props ) {
 }; // Tasks
 
 export default Tasks;
-
-/*
-
-
-
-*/

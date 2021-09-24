@@ -4,16 +4,18 @@ const activitiesData = [
     activityName: "Work",
     addressFrom: "Laverton",
     addressTo: "Flinders Street Railway Station",
-    arriveBy: 900,
-    departBy: 800
+    departBy: "8:00",
+    arriveBy: "9:00",
+    duration: 1234    // seconds
   },
   {
     dateId: '2021-09-25',
     activityName: "Picnic",
     addressFrom: "Laverton",
     addressTo: "Wyndham Park",
-    arriveBy: 900,
-    departBy: 800
+    departBy: "8:00",
+    arriveBy: "9:00",
+    duration: 1234    // seconds
   }
 ];
 

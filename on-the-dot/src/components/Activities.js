@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const google = window.google;
@@ -7,31 +7,54 @@ const google = window.google;
 function Activities( props ) {
 
   const [ activities, setActivities ] = useState( [] );
-
-   const history = useHistory();
-   const params = useParams();
+  const params = useParams();
 
   function performSearch( searchText ) {
-    console.log("performSearch: ", props.activities);
+    // console.log("performSearch: ", props.activities);
     const searchTerm = searchText.toLowerCase();
-    const searchResults = props.activities.filter(
-      activity => activity.activityName.toLowerCase().includes(searchTerm)
-    );
+
+    const searchResults = () => {
+      const activity = props.activities.filter( a => a.activityName.toLowerCase().includes(searchTerm) );
+      if ( activity.length > 0 ){
+        // console.log("activity: ", activity);
+
+        // Sum tasks durations per activity
+        activity.map( obj => {
+          // console.log("props.tasks.filter( t => t.date === obj.dateId ): ", props.tasks.filter( t => t.date === obj.dateId ));
+          const tasksDates = props.tasks.filter( t => t.date === obj.dateId && t.activityName.toLowerCase() === searchTerm);
+
+          // console.log("tasksDates: ", tasksDates);
+          if ( tasksDates.length > 0 ){
+            const durationMinutes = tasksDates.reduce( (prev, curr) => prev + curr.duration, 0 );
+            const toMinutes = (Number(obj.arriveBy.split(':')[0]) * 60) +
+              Number(obj.arriveBy.split(':')[1]) -
+              ( ( Math.round( obj.duration / 60 ) ) + durationMinutes );
+            const hour = Math.floor( toMinutes / 60 );
+            const minutes = toMinutes % 60 < 10 ? `0${toMinutes % 60}` : toMinutes % 60;
+            obj.departBy = `${hour}:${minutes}`;
+          }
+        });
+      }
+      return activity;
+    }
 
     setActivities( searchResults );
   };
 
   useEffect( () => {
-    console.log("Activities.useEffect() is running: ", props);
+    // console.log("Activities.useEffect() is running: ", props);
     performSearch( params.query );
   }, [ params.query ] );
 
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
-    console.log("Activities.handleSubmit() clicked.");
+    // console.log("Activities.handleSubmit() clicked.");
+    // console.log("input arrive time: ", ev.target.arriveBy.value);
 
-    if ( props.activities.find( d => d.dateId === ev.target.dateId.value) ){
+    if ( props.activities.find( d => d.dateId === ev.target.dateId.value &&
+        d.activityName.toLowerCase() === ev.target.activityName.value.toLowerCase() ) ){
+      alert("same activity found");
       return;
     }
       const service = new google.maps.DistanceMatrixService();
@@ -48,8 +71,12 @@ function Activities( props ) {
             alert('Error was: ' + status);
           } else {
             console.log( response );
-            // console.log( response.rows[0].elements[0].duration );
-            // setDuration( Math.round(response.rows[0].elements[0].duration.value/60) );
+
+            const toMinutes = (Number(ev.target.arriveBy.value.split(':')[0]) * 60) +
+                              Number(ev.target.arriveBy.value.split(':')[1]) -
+                              Math.round( response.rows[0].elements[0].duration.value / 60 );
+            const hour = Math.floor( toMinutes / 60 );
+            const minutes = toMinutes % 60;
 
             const theData = {
               dateId: ev.target.dateId.value,
@@ -57,7 +84,8 @@ function Activities( props ) {
               addressFrom: response.originAddresses[0].split(',')[0],
               addressTo: response.destinationAddresses[0].split(',')[0],
               arriveBy: ev.target.arriveBy.value,
-              departBy: parseInt(ev.target.arriveBy.value) - Math.round( response.rows[0].elements[0].duration.value / 60 )
+              departBy: `${hour}:${minutes}`,
+              duration: response.rows[0].elements[0].duration.value
             };
 
             props.setActivities([ ...props.activities, theData ]);
@@ -66,7 +94,6 @@ function Activities( props ) {
         }
       )
   };
-
 
   const minDate = () => {
     let today = new Date();
@@ -88,14 +115,15 @@ function Activities( props ) {
         <input type="text" name="activityName" placeholder="Activity" />&nbsp;
         <input type="text" name="addressFrom" placeholder="Address From" />&nbsp;
         <input type="text" name="addressTo" placeholder="Address To" />&nbsp;
-        <input type="text" name="arriveBy" placeholder="Arrive By (hhmm)" />&nbsp;
+        <input type="time" name="arriveBy" placeholder="Arrive By (hhmm)" />&nbsp;
       <button>Submit</button>
       </form>
+      <hr />
       <ul>
       {
         activities.length > 0
         &&
-        activities.map( (activity) =>
+        activities.map( (activity, index) =>
           <li key={ activity.dateId } >
             <h3>
             Date: <Link to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`}
@@ -103,42 +131,18 @@ function Activities( props ) {
             <br />
             Activity: { activity.activityName }
             <br />
-            Depart: { activity.addressFrom } by: { activity.departBy.toString().length < 4 ? "0" + activity.departBy : activity.departBy }
+            Depart: { activity.departBy }
             <br />
-            Arrive: { activity.addressTo } by: { activity.arriveBy }
+            Arrive: { activity.arriveBy }
             </h3>
           </li>
         )
       }
       </ul>
 
+
     </div>
   ) // return
 }; // Activities
 
 export default Activities;
-
-/*
-
-{
-  dateId: "2021-09-20",
-  activityName: "Work",
-  address: {            // get from google map
-    addressFrom: "Home",
-    addressTo: "Melbourne"
-  },
-  date: "18/09/2021",
-  arriveBy: 900,
-  departBy: 800
-}
-
-epoch time
-1631887200
-1631973600
-const myDate = new Date("September 18, 2021 00:00:00");
-myDate.getTime()/1000.0;  -- 1631887200
-
-1 day = 24 hours = 1440 minutes = 84600 seconds
-<input type="text" name="departBy" placeholder="Depart By" disabled />&nbsp;
-
-*/

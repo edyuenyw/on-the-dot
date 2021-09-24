@@ -9,14 +9,13 @@ function ActivitiesSearch( props ){
   const history = useHistory();
 
   const handleSubmit = (ev) => {
-    console.log("ActivitiesSearch.handleSubmit() clicked: ", searchText);
+    // console.log("ActivitiesSearch.handleSubmit() clicked: ", searchText);
     ev.preventDefault();
     history.push(`activities/search/${ searchText }`);
   };
 
   const handleChange = (ev) => {
-    console.log("ActivitiesSearch.handleChange() clicked.");
-    // for noe display searchText target value
+    // console.log("ActivitiesSearch.handleChange() clicked.");
     setSearchText( ev.target.value );
   };
 
@@ -24,10 +23,9 @@ function ActivitiesSearch( props ){
     <div>
       <h3>Activities</h3>
       <form onSubmit={ handleSubmit } >
-        <input type="text" onChange={ (handleChange) } placeholder="Search activities"/>
+        <input type="text" onChange={ handleChange } placeholder="Search activities"/>
         <button>Search</button>
       </form>
-      Current text: { searchText }
     </div>
   ) // return
 } // ActivitiesSearch
