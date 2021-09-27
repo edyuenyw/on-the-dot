@@ -20,7 +20,7 @@ function ActivitiesSearch( props ){
   };
 
   return(
-    <div>
+    <div className="activities-search">
       <h3>Activities</h3>
       <form onSubmit={ handleSubmit } >
         <input type="text" onChange={ handleChange } placeholder="Search activities"/>

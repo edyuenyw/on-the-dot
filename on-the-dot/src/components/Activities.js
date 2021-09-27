@@ -109,36 +109,52 @@ function Activities( props ) {
 
   return(
     <div>
-      <h1>Activities</h1>
-      <form onSubmit={ handleSubmit } >
-        <input type="date" name="dateId" min={ minDate() } defaultValue={ minDate() } />&nbsp;
-        <input type="text" name="activityName" placeholder="Activity" />&nbsp;
-        <input type="text" name="addressFrom" placeholder="Address From" />&nbsp;
-        <input type="text" name="addressTo" placeholder="Address To" />&nbsp;
-        <input type="time" name="arriveBy" placeholder="Arrive By (hhmm)" />&nbsp;
-      <button>Submit</button>
-      </form>
-      <hr />
-      <ul>
-      {
-        activities.length > 0
-        &&
-        activities.map( (activity, index) =>
-          <li key={ activity.dateId } >
-            <h3>
-            Date: <Link to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`}
-              >{ activity.dateId }</Link>
-            <br />
-            Activity: { activity.activityName }
-            <br />
-            Depart: { activity.departBy }
-            <br />
-            Arrive: { activity.arriveBy }
-            </h3>
-          </li>
-        )
-      }
-      </ul>
+      <div className="search-results">
+        <form onSubmit={ handleSubmit } >
+          <input type="date" name="dateId" min={ minDate() } defaultValue={ minDate() } />
+          <input type="time" name="arriveBy" placeholder="Arrive By (hhmm)" />
+          <input type="text" name="activityName" placeholder="Activity" />
+          <input type="text" name="addressFrom" placeholder="Address From" />
+          <input type="text" name="addressTo" placeholder="Address To" />
+          <button>New</button>
+        </form>
+      </div>
+
+          <ul className="row">
+          {
+            activities.length > 0
+            &&
+            activities.map( (activity, index) =>
+
+              <li className="activities-card" key={ activity.dateId } >
+              <Link className="text-link" to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`} >
+                  <div>
+                    <label className="txt-label">
+                      { activity.dateId }
+                    </label>
+                  </div>
+
+                  <div>
+                    <label className="txt-label-title">
+                      { activity.activityName }
+                    </label>
+                  </div>
+
+                  <div className="txt-label">
+                    <label className="txt-label">
+                      Depart: { activity.departBy }
+                    </label>
+                    <label className="txt-label">
+                      Arrive: { activity.arriveBy }
+                    </label>
+                  </div>
+
+                  </Link>
+              </li>
+
+            )
+          }
+          </ul>
 
 
     </div>

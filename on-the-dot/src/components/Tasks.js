@@ -34,24 +34,34 @@ function Tasks( props ) {
 
   return(
     <div>
-      <h1>Tasks</h1>
+    <div className="search-results">
       <form onSubmit={ handleSubmit } >
+        <div className="task-header">
+          { params.dateId }
+          { params.query }
+        </div>
         <input type="text" name="taskName" placeholder="Task" />
         &nbsp;
         <input type="text" name="duration" placeholder="Duration in mins" />
-        <button>Submit</button>
+        <button>New</button>
       </form>
-      <ul>
+      </div>
+
+      <ul className="row">
       {
         tasks.length > 0
         &&
         tasks.map( (task) =>
-          <li key={ task.id } >
-            <h3>
-              Date: { task.date } &nbsp;
-              Task: { task.name } &nbsp;
-              Duration: { task.duration } minutes
-            </h3>
+          <li className="tasks-card" key={ task.id } >
+            <div className="tasks-labels">
+              <div className="tasks-title">
+                { task.name }
+              </div>
+
+              <div>
+                Duration: { task.duration } minutes
+              </div>
+            </div>
           </li>
         )
       }

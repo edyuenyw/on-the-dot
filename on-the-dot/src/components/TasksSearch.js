@@ -4,10 +4,8 @@ function TasksSearch( props ){
 
   const [ searchText, setSearchText ] = useState( '' );
   const [ results, setResults ] = useState( {} );
-  // const history = useHistory();
 
   useEffect( () => {
-    // console.log("TasksSearch.useEffect() is running: ");
 
     const searchTerm = searchText.toLowerCase();
     const results = props.tasks.filter(
@@ -18,27 +16,31 @@ function TasksSearch( props ){
   }, [ searchText ] );
 
   const handleChange = (ev) => {
-    // console.log("TasksSearch.handleChange() clicked.");
-    // for noe display searchText target value
     setSearchText( ev.target.value );
   };
 
   return(
-    <div>
+    <div className="tasks-search" >
       <h3>Tasks</h3>
       <input type="text" onChange={ handleChange } placeholder="Search tasks"/>
 
-    <ul>
+    <ul className="row">
       {
         results.length > 0
         &&
         results.map( ( task ) =>
-        <li key={ task.id } >
-          <h3>
-            Date: { task.date } &nbsp;
-            Task: { task.name } &nbsp;
-            Duration: { task.duration } minutes
-          </h3>
+        <li className="tasks-card" key={ task.id } >
+          <div className="tasks-labels">
+            <div>
+              { task.date }
+            </div>
+            <div className="tasks-title">
+              { task.name }
+            </div>
+            <div>
+              Duration: { task.duration }
+            </div>
+          </div>
         </li>
         )
       }

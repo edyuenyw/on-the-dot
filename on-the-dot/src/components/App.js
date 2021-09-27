@@ -31,15 +31,20 @@ function App() {
 
     <div className="App">
       <Router basename={ process.env.PUBLIC_URL }>
-        <nav>
-          <Link to="/activities">Activities</Link>
-          &nbsp; | &nbsp;
-          <Link to="/tasks">Tasks</Link>
+        <nav className="navbar">
+          <div class="App-logo">on-the-dot...</div>
+            <ul className="nav-link">
+              <div className="menu">
+                  <li><Link to="/activities">Activities</Link></li>
+                  <li><Link to="/tasks">Tasks</Link></li>
+              </div>
+            </ul>
+
         </nav>
 
         <Switch>
 
-          <Route exact path="/" component={ ActivitiesSearch } />
+          <Route exact path="/"/>
           <Route exact path="/activities" component={ ActivitiesSearch } />
           <Route exact path="/activities/search/:query" >
             <Activities
