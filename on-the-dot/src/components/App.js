@@ -35,6 +35,7 @@ function App() {
           <div class="App-logo">on-the-dot...</div>
             <ul className="nav-link">
               <div className="menu">
+                  <li><Link to="/">Home</Link></li>
                   <li><Link to="/activities">Activities</Link></li>
                   <li><Link to="/tasks">Tasks</Link></li>
               </div>
