@@ -35,11 +35,13 @@ function Tasks( props ) {
   return(
     <div>
     <div className="search-results">
+      <label>
+        { params.dateId }
+        &nbsp;
+        { params.query }
+      </label>
+
       <form onSubmit={ handleSubmit } >
-        <div className="task-header">
-          { params.dateId }
-          { params.query }
-        </div>
         <input type="text" name="taskName" placeholder="Task" />
         &nbsp;
         <input type="text" name="duration" placeholder="Duration in mins" />

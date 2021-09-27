@@ -64,7 +64,9 @@ li {
   width: 100%;
   text-align: center;
   margin-top: 8px;
-  font-size: 18px;
+  font-size: 26px;
+  color: #626261;
+
 }
 
 .activities-search input, .tasks-search input {
@@ -95,8 +97,11 @@ li {
 .search-results {
   display: block;
   text-align: center;
+  text-transform: capitalize;
   margin-top: 8px;
   font-size: 18px;
+  font-size: 26px;
+  color: #626261;
 }
 
 .search-results input {
@@ -152,13 +157,16 @@ li {
 
 .text-link, .tasks-labels {
   text-decoration: none;
-  text-transform: capitalize;;
+  text-transform: capitalize;
   color: #f7f7f7;
 
 }
 
 .txt-label {
+  display: flex;
+  justify-content: space-between;
   font-size: 18px;
+  padding: 0px 5px 0px 5px;
 }
 
 .txt-label-title, .tasks-title {
