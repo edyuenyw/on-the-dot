@@ -32,6 +32,10 @@ function Tasks( props ) {
 
   };
 
+  const handleDelete = () => {
+    console.log("Activities.handleDelete() clicked.");
+  };
+
   return(
     <div>
     <div className="search-results">
@@ -60,8 +64,9 @@ function Tasks( props ) {
                 { task.name }
               </div>
 
-              <div>
+              <div className="txt-label">
                 Duration: { task.duration } minutes
+                <button onClick={ handleDelete }>-</button>
               </div>
             </div>
           </li>

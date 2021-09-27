@@ -30,15 +30,21 @@ function TasksSearch( props ){
         &&
         results.map( ( task ) =>
         <li className="tasks-card" key={ task.id } >
-          <div className="tasks-labels">
-            <div>
+          <div>
+            <div className="txt-label">
+            <label>
               { task.date }
+            </label>
+            <label>
+              { task.activityName }
+            </label>
             </div>
+
             <div className="tasks-title">
               { task.name }
             </div>
-            <div>
-              Duration: { task.duration }
+            <div className="txt-label">
+              Duration: { task.duration } minutes
             </div>
           </div>
         </li>

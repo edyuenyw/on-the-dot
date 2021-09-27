@@ -87,6 +87,7 @@ li {
   font-size: 18px;
   border: none;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 .activities-search button:hover, .search-results button:hover {
@@ -106,7 +107,7 @@ li {
 
 .search-results input {
   box-sizing: border-box;
-  border-radius: 4px;
+  border-radius: 5px;
   border-style: solid;
   margin: 8px 0px 8px 8px;
   padding: 6px;
@@ -121,6 +122,7 @@ li {
   font-size: 18px;
   border: none;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 /* Remove extra left and right margins, due to padding */
@@ -151,6 +153,8 @@ li {
  margin: 5px 5px;
  padding: 5px 0px 5px 0px;
  background: linear-gradient(to bottom left, #71a1d1 50%, #638DB7 100%);
+ text-transform: capitalize;
+ 
  /* border:solid; */
 
 }
@@ -159,7 +163,6 @@ li {
   text-decoration: none;
   text-transform: capitalize;
   color: #f7f7f7;
-
 }
 
 .txt-label {
@@ -167,12 +170,22 @@ li {
   justify-content: space-between;
   font-size: 18px;
   padding: 0px 5px 0px 5px;
+  color: #f7f7f7;
 }
 
 .txt-label-title, .tasks-title {
   font-size: 36px;
 }
 
+.txt-label button, .tasks-title button {
+  box-sizing: border-box;
+  padding: 6px 10px;
+  margin: 2px 8px 0 3px;
+  background: #ddd;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+}
 
 
 /*

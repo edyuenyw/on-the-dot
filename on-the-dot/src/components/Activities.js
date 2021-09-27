@@ -127,7 +127,6 @@ function Activities( props ) {
             activities.map( (activity, index) =>
 
               <li className="activities-card" key={ activity.dateId } >
-              <Link className="text-link" to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`} >
                   <div>
                     <label className="txt-label">
                       { activity.dateId }
@@ -135,9 +134,11 @@ function Activities( props ) {
                   </div>
 
                   <div>
+                  <Link className="text-link" to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`} >
                     <label className="txt-label-title">
                       { activity.activityName }
                     </label>
+                    </Link>
                   </div>
 
                   <div className="txt-label">
@@ -148,8 +149,6 @@ function Activities( props ) {
                       Arrive: { activity.arriveBy }
                     </label>
                   </div>
-
-                  </Link>
               </li>
 
             )
