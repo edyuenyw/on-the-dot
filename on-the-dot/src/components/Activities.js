@@ -21,14 +21,18 @@ function Activities( props ) {
         // Sum tasks durations per activity
         activity.map( obj => {
           // console.log("props.tasks.filter( t => t.date === obj.dateId ): ", props.tasks.filter( t => t.date === obj.dateId ));
-          const tasksDates = props.tasks.filter( t => t.date === obj.dateId && t.activityName.toLowerCase() === searchTerm);
+          const tasksDates = props.tasks.filter( t => t.date === obj.dateId && t.activityName.toLowerCase() === searchTerm );
 
-          // console.log("tasksDates: ", tasksDates);
           if ( tasksDates.length > 0 ){
-            const durationMinutes = tasksDates.reduce( (prev, curr) => prev + curr.duration, 0 );
-            const toMinutes = (Number(obj.arriveBy.split(':')[0]) * 60) +
-              Number(obj.arriveBy.split(':')[1]) -
-              ( ( Math.round( obj.duration / 60 ) ) + durationMinutes );
+            console.log("tasksDates: ", tasksDates);
+            const calculateMinutes = tasksDates.reduce( (prev, curr) => prev + curr.duration, 0 ); // need to do something here
+            const durationMinutes = calculateMinutes < 0 ? 0 : calculateMinutes;
+            console.log("durationMinutes: ", durationMinutes, " and activity.duration: ", ( Math.round( obj.duration / 60 ) ) );
+
+            const toMinutes = ( Number( obj.arriveBy.split(':')[0] ) * 60 ) +
+              Number( obj.arriveBy.split(':')[1] ) -
+              ( Math.round( obj.duration / 60 ) ) - durationMinutes ;
+
             const hour = Math.floor( toMinutes / 60 );
             const minutes = toMinutes % 60 < 10 ? `0${toMinutes % 60}` : toMinutes % 60;
             obj.departBy = `${hour}:${minutes}`;
@@ -125,32 +129,30 @@ function Activities( props ) {
             activities.length > 0
             &&
             activities.map( (activity, index) =>
+            <div className="column">
 
-              <li className="activities-card" key={ activity.dateId } >
-                  <div>
-                    <label className="txt-label">
-                      { activity.dateId }
-                    </label>
-                  </div>
+              <Link to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`} >
+                <li className="activities-card" key={ activity.dateId } >
+                  <label className="txt-label">
+                    { activity.dateId }
+                  </label>
 
-                  <div>
-                  <Link className="text-link" to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`} >
-                    <label className="txt-label-title">
-                      { activity.activityName }
-                    </label>
-                    </Link>
-                  </div>
+                  <label className="txt-label-title">
+                    { activity.activityName }
+                  </label>
 
                   <div className="txt-label">
-                    <label className="txt-label">
+                    <label>
                       Depart: { activity.departBy }
                     </label>
-                    <label className="txt-label">
+                    <label>
                       Arrive: { activity.arriveBy }
                     </label>
                   </div>
-              </li>
+                </li>
+              </Link>
 
+            </div>
             )
           }
           </ul>

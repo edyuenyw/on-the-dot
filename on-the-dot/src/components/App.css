@@ -83,7 +83,7 @@ li {
   box-sizing: border-box;
   padding: 6px 10px;
   margin: 2px 8px 0 3px;
-  background: #ddd;
+  background: #dddddd;
   font-size: 18px;
   border: none;
   cursor: pointer;
@@ -118,7 +118,7 @@ li {
   box-sizing: border-box;
   padding: 6px 10px;
   margin: 2px 8px 0 3px;
-  background: #ddd;
+  background: #dddddd;
   font-size: 18px;
   border: none;
   cursor: pointer;
@@ -132,6 +132,14 @@ li {
   margin-top: 8px;
   /*font-size: 18px;*/
   /* border:solid; */
+}
+
+.column {
+
+}
+
+.column li:hover {
+  cursor: pointer;
 }
 
 .activities-card {
@@ -154,12 +162,12 @@ li {
  padding: 5px 0px 5px 0px;
  background: linear-gradient(to bottom left, #71a1d1 50%, #638DB7 100%);
  text-transform: capitalize;
- 
+
  /* border:solid; */
 
 }
 
-.text-link, .tasks-labels {
+.tasks-labels {
   text-decoration: none;
   text-transform: capitalize;
   color: #f7f7f7;
@@ -169,20 +177,18 @@ li {
   display: flex;
   justify-content: space-between;
   font-size: 18px;
-  padding: 0px 5px 0px 5px;
+  padding: 0px 8px 0px 8px;
   color: #f7f7f7;
 }
 
 .txt-label-title, .tasks-title {
   font-size: 36px;
+  color: #f7f7f7;
 }
 
 .txt-label button, .tasks-title button {
-  box-sizing: border-box;
-  padding: 6px 10px;
-  margin: 2px 8px 0 3px;
-  background: #ddd;
-  font-size: 18px;
+  background: #dddddd;
+  width: 20px;  
   border: none;
   border-radius: 5px;
 }
@@ -190,9 +196,6 @@ li {
 
 /*
 
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-padding: 16px;
-text-align: center;
-background-color: #f1f1f1;
-margin: 5px;
+
+
 */

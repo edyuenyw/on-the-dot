@@ -32,7 +32,7 @@ function App() {
     <div className="App">
       <Router basename={ process.env.PUBLIC_URL }>
         <nav className="navbar">
-          <div class="App-logo">on-the-dot...</div>
+          <div className="App-logo">on-the-dot...</div>
             <ul className="nav-link">
               <div className="menu">
                   <li><Link to="/">Home</Link></li>

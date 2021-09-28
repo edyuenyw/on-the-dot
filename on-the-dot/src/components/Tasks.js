@@ -7,7 +7,6 @@ function Tasks( props ) {
   const params = useParams();
 
   useEffect( () => {
-    console.log("Tasks.useEffect() is running: ", params);
 
     const taskResults = props.tasks.filter(
       task => task.date === params.dateId
@@ -18,22 +17,37 @@ function Tasks( props ) {
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
-    console.log( "Tasks.handleSubmit() clicked" );
+    // console.log( "Tasks.handleSubmit() clicked" );
 
-    const theData = {
-      id: Date.now(),
-      activityName: params.query,
-      date: params.dateId,
-      name: ev.target.taskName.value,
-      duration: parseInt(ev.target.duration.value)
+    if ( ev.target.taskName.value.length > 0 && !isNaN( parseInt( ev.target.duration.value ) ) ) {
+      console.log("adding new tasks");
+      const theData = {
+        id: Date.now(),
+        activityName: params.query,
+        date: params.dateId,
+        name: ev.target.taskName.value,
+        duration: parseInt(ev.target.duration.value),
+        deleted: false
+      }
+      props.setTasks([ ...props.tasks, theData ]);
+      setTasks([ ...tasks, theData ]);
     }
-    props.setTasks([ ...props.tasks, theData ]);
-    setTasks([ ...tasks, theData ]);
 
   };
 
-  const handleDelete = () => {
-    console.log("Activities.handleDelete() clicked.");
+  const handleDelete = ( taskId ) => {
+    // array of the task selected
+    // mutable
+    props.tasks.map( task => {
+        // console.log("task.id == taskId: ", task.id, ":", task.id === taskId);
+        if ( task.id === taskId ){
+          task.deleted = !task.deleted;
+          task.duration = task.duration * -1;
+        }
+      } );
+
+    setTasks( props.tasks.filter( task => task.date === params.dateId ) );
+
   };
 
   return(
@@ -54,6 +68,7 @@ function Tasks( props ) {
       </div>
 
       <ul className="row">
+      {console.log("tasks: ", tasks)}
       {
         tasks.length > 0
         &&
@@ -66,7 +81,7 @@ function Tasks( props ) {
 
               <div className="txt-label">
                 Duration: { task.duration } minutes
-                <button onClick={ handleDelete }>-</button>
+                <button onClick={ () => handleDelete(task.id) }>{ task.deleted ? "+" : "-" }</button>
               </div>
             </div>
           </li>
@@ -79,3 +94,6 @@ function Tasks( props ) {
 }; // Tasks
 
 export default Tasks;
+
+
+// TODO: Task deletion. flag only and recalculate in Activities. Then do styling on deleted/flagged styling. Also change the button + -
