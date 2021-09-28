@@ -27,6 +27,7 @@ a {
 
 li {
   list-style: none;
+  display: inline;
 }
 
 .navbar {
@@ -145,6 +146,10 @@ li {
   /* border:solid; */
 }
 
+.activities-card:hover {
+  cursor: pointer;
+}
+
 .tasks-card {
  box-sizing: border-box;
  border-radius: 5px;
@@ -154,9 +159,6 @@ li {
  padding: 5px 0px 5px 0px;
  background: linear-gradient(to bottom left, #71a1d1 50%, #638DB7 100%);
  text-transform: capitalize;
-
- /* border:solid; */
-
 }
 
 .tasks-labels {
@@ -184,10 +186,3 @@ li {
   border: none;
   border-radius: 5px;
 }
-
-
-/*
-
-
-
-*/

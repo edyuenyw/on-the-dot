@@ -24,10 +24,10 @@ function Activities( props ) {
           const tasksDates = props.tasks.filter( t => t.date === obj.dateId && t.activityName.toLowerCase() === searchTerm );
 
           if ( tasksDates.length > 0 ){
-            console.log("tasksDates: ", tasksDates);
+            // console.log("tasksDates: ", tasksDates);
             const calculateMinutes = tasksDates.reduce( (prev, curr) => prev + curr.duration, 0 ); // need to do something here
             const durationMinutes = calculateMinutes < 0 ? 0 : calculateMinutes;
-            console.log("durationMinutes: ", durationMinutes, " and activity.duration: ", ( Math.round( obj.duration / 60 ) ) );
+            // console.log("durationMinutes: ", durationMinutes, " and activity.duration: ", ( Math.round( obj.duration / 60 ) ) );
 
             const toMinutes = ( Number( obj.arriveBy.split(':')[0] ) * 60 ) +
               Number( obj.arriveBy.split(':')[1] ) -
@@ -58,45 +58,46 @@ function Activities( props ) {
 
     if ( props.activities.find( d => d.dateId === ev.target.dateId.value &&
         d.activityName.toLowerCase() === ev.target.activityName.value.toLowerCase() ) ){
-      alert("same activity found");
+      alert("Same activity was found");
       return;
     }
-      const service = new google.maps.DistanceMatrixService();
 
-      service.getDistanceMatrix(
-        {
-          origins: [ ev.target.addressFrom.value ],
-          destinations: [ ev.target.addressTo.value ],
-          region: "AU",
-          travelMode: google.maps.TravelMode.DRIVING
-        },
-        function( response, status ){
-          if (status !== google.maps.DistanceMatrixStatus.OK) {
-            alert('Error was: ' + status);
-          } else {
-            console.log( response );
+    const service = new google.maps.DistanceMatrixService();
 
-            const toMinutes = (Number(ev.target.arriveBy.value.split(':')[0]) * 60) +
-                              Number(ev.target.arriveBy.value.split(':')[1]) -
-                              Math.round( response.rows[0].elements[0].duration.value / 60 );
-            const hour = Math.floor( toMinutes / 60 );
-            const minutes = toMinutes % 60;
+    service.getDistanceMatrix(
+      {
+        origins: [ ev.target.addressFrom.value ],
+        destinations: [ ev.target.addressTo.value ],
+        region: "AU",
+        travelMode: google.maps.TravelMode.DRIVING
+      },
+      function( response, status ){
+        if (status !== google.maps.DistanceMatrixStatus.OK) {
+          alert('Error was: ' + status);
+        } else {
+          console.log( response );
 
-            const theData = {
-              dateId: ev.target.dateId.value,
-              activityName: ev.target.activityName.value,
-              addressFrom: response.originAddresses[0].split(',')[0],
-              addressTo: response.destinationAddresses[0].split(',')[0],
-              arriveBy: ev.target.arriveBy.value,
-              departBy: `${hour}:${minutes}`,
-              duration: response.rows[0].elements[0].duration.value
-            };
+          const toMinutes = (Number(ev.target.arriveBy.value.split(':')[0]) * 60) +
+                            Number(ev.target.arriveBy.value.split(':')[1]) -
+                            Math.round( response.rows[0].elements[0].duration.value / 60 );
+          const hour = Math.floor( toMinutes / 60 );
+          const minutes = toMinutes % 60;
 
-            props.setActivities([ ...props.activities, theData ]);
-            setActivities([ ...activities, theData ]);
-          }
+          const theData = {
+            dateId: ev.target.dateId.value,
+            activityName: ev.target.activityName.value,
+            addressFrom: response.originAddresses[0].split(',')[0],
+            addressTo: response.destinationAddresses[0].split(',')[0],
+            arriveBy: ev.target.arriveBy.value,
+            departBy: `${hour}:${minutes}`,
+            duration: response.rows[0].elements[0].duration.value
+          };
+
+          props.setActivities([ ...props.activities, theData ]);
+          setActivities([ ...activities, theData ]);
         }
-      )
+      }
+    )
   };
 
   const minDate = () => {
@@ -128,31 +129,31 @@ function Activities( props ) {
           {
             activities.length > 0
             &&
-            activities.map( (activity, index) =>
-            <div className="column">
+            activities.map( activity =>
 
-              <Link to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`} >
-                <li className="activities-card" key={ activity.dateId } >
-                  <label className="txt-label">
-                    { activity.dateId }
-                  </label>
-
-                  <label className="txt-label-title">
-                    { activity.activityName }
-                  </label>
-
-                  <div className="txt-label">
-                    <label>
-                      Depart: { activity.departBy }
+              <li key={ activity.dateId + activity.activityName }   >
+                <Link to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`} >
+                  <div className="activities-card">
+                    <label className="txt-label">
+                      { activity.dateId }
                     </label>
-                    <label>
-                      Arrive: { activity.arriveBy }
+
+                    <label className="txt-label-title">
+                      { activity.activityName }
                     </label>
+
+                    <div className="txt-label">
+                      <label>
+                        Depart: { activity.departBy }
+                      </label>
+                      <label>
+                        Arrive: { activity.arriveBy }
+                      </label>
+                    </div>
                   </div>
-                </li>
-              </Link>
+                </Link>
+              </li>
 
-            </div>
             )
           }
           </ul>
