@@ -68,7 +68,6 @@ function Tasks( props ) {
       </div>
 
       <ul className="row">
-      {console.log("tasks: ", tasks)}
       {
         tasks.length > 0
         &&
