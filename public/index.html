@@ -27,10 +27,6 @@
     <title>on-the-dot...</title>
   </head>
   <body>    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
-    <script id="google-map-script"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCZjnRv_Kdl4ze7G0XZeM54P2hPZBSQKU"
-      async
-    ></script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--
@@ -43,5 +39,11 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCZjnRv_Kdl4ze7G0XZeM54P2hPZBSQKU&libraries=places"
+      async
+    ></script>
+
   </body>
 </html>
