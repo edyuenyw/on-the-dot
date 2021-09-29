@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 function Tasks( props ) {
 
   const [ tasks, setTasks ] = useState( [] );
+  const [ errors, setErrors ] = useState( {} );
+  const [ errorExists, setErrorExists ] = useState( "" );
+
   const params = useParams();
 
   useEffect( () => {
@@ -19,18 +22,34 @@ function Tasks( props ) {
     ev.preventDefault();
     // console.log( "Tasks.handleSubmit() clicked" );
 
-    if ( ev.target.taskName.value.length > 0 && !isNaN( parseInt( ev.target.duration.value ) ) ) {
-      console.log("adding new tasks");
-      const theData = {
-        id: Date.now(),
-        activityName: params.query,
-        date: params.dateId,
-        name: ev.target.taskName.value,
-        duration: parseInt(ev.target.duration.value),
-        deleted: false
+    let errorFields = [];
+    if ( ev.target.taskName.value.length <= 0 ){
+      errorFields = [ ...errorFields, "Task"]
+    }
+
+    if ( ev.target.duration.value.length <= 0 ){
+      errorFields = [ ...errorFields, "Duration"]
+    }
+
+    setErrors( errorFields );
+
+    if ( errorFields.length > 0 ){
+      setErrorExists( "Missing required fields" );
+    } else {
+      if ( ev.target.taskName.value.length > 0 && !isNaN( parseInt( ev.target.duration.value ) ) ) {
+        console.log("adding new tasks");
+        const theData = {
+          id: Date.now(),
+          activityName: params.query,
+          date: params.dateId,
+          name: ev.target.taskName.value,
+          duration: parseInt(ev.target.duration.value),
+          deleted: false
+        }
+        setErrorExists( "" );
+        props.setTasks([ ...props.tasks, theData ]);
+        setTasks([ ...tasks, theData ]);
       }
-      props.setTasks([ ...props.tasks, theData ]);
-      setTasks([ ...tasks, theData ]);
     }
 
   };
@@ -52,40 +71,57 @@ function Tasks( props ) {
 
   return(
     <div>
-    <div className="search-results">
-      <label>
-        { params.dateId }
-        &nbsp;
-        { params.query }
-      </label>
+      <div className="tasks-results-invalid">
+        {
+          errorExists.length > 0
+          &&
+          <p>{ errorExists }:</p>
+        }
+        <ul>
+        {
+          errors.length > 0
+          &&
+            errors.map( (error, index ) =>
+              <li key={ index }>{ error }</li>
+            )
+        }
+        </ul>
+      </div>
 
-      <form onSubmit={ handleSubmit } >
-        <input type="text" name="taskName" placeholder="Task" />
-        &nbsp;
-        <input type="text" name="duration" placeholder="Duration in mins" />
-        <button>New</button>
-      </form>
+      <div className="search-results">
+        <label>
+          { params.dateId }
+          &nbsp;
+          { params.query }
+        </label>
+
+        <form onSubmit={ handleSubmit } >
+          <input type="text" name="taskName" placeholder="Task" />
+          &nbsp;
+          <input type="text" name="duration" placeholder="Duration in mins" />
+          <button>New</button>
+        </form>
       </div>
 
       <ul className="row">
-      {
-        tasks.length > 0
-        &&
-        tasks.map( (task) =>
-          <li className="tasks-card" key={ task.id } >
-            <div className="tasks-labels">
-              <div className="tasks-title">
-                { task.name }
-              </div>
+        {
+          tasks.length > 0
+          &&
+          tasks.map( (task) =>
+            <li className="tasks-card" key={ task.id } >
+              <div className="tasks-labels">
+                <div className="tasks-title">
+                  { task.name }
+                </div>
 
-              <div className="txt-label">
-                Duration: { task.duration } minutes
-                <button onClick={ () => handleDelete(task.id) }>{ task.deleted ? "+" : "-" }</button>
+                <div className="txt-label">
+                  Duration: { task.duration } minutes
+                  <button onClick={ () => handleDelete(task.id) }>{ task.deleted ? "+" : "-" }</button>
+                </div>
               </div>
-            </div>
-          </li>
-        )
-      }
+            </li>
+          )
+        }
       </ul>
 
     </div>

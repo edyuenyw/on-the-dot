@@ -7,6 +7,9 @@ const google = window.google;
 function Activities( props ) {
 
   const [ activities, setActivities ] = useState( [] );
+  const [ errors, setErrors ] = useState( {} );
+  const [ errorExists, setErrorExists ] = useState( "" );
+
   const params = useParams();
 
   function performSearch( searchText ) {
@@ -47,20 +50,19 @@ function Activities( props ) {
 
   useEffect( () => {
     // console.log("Activities.useEffect() is running: ", props);
+    setErrors({});
+    setErrorExists("");
     performSearch( params.query );
+
   }, [ params.query ] );
 
 
   const handleSubmit = (ev) => {
-    ev.preventDefault();
+    // ev.preventDefault();
     // console.log("Activities.handleSubmit() clicked.");
     // console.log("input arrive time: ", ev.target.arriveBy.value);
 
-    if ( props.activities.find( d => d.dateId === ev.target.dateId.value &&
-        d.activityName.toLowerCase() === ev.target.activityName.value.toLowerCase() ) ){
-      alert("Same activity was found");
-      return;
-    }
+    console.log("handleSubmit errors: ", errors);
 
     const service = new google.maps.DistanceMatrixService();
 
@@ -112,10 +114,68 @@ function Activities( props ) {
     return today = yyyy + '-' + mm + '-' + dd;
   };
 
+  const handleValidationSubmit = (ev) => {
+    console.log("ev: ", ev);
+    ev.preventDefault();
+
+    let errorFields = [];
+    if ( ev.target.activityName.value.length <= 0 ){
+      errorFields = [ ...errorFields, "Activity"]
+    }
+
+    if ( ev.target.arriveBy.value.length <= 0 ){
+      errorFields = [ ...errorFields, "Arrival Time"]
+    }
+
+    if ( ev.target.addressFrom.value.length <= 0 ){
+      errorFields = [ ...errorFields, "Address From"]
+    }
+
+    if ( ev.target.addressTo.value.length <= 0 ){
+      errorFields = [ ...errorFields, "Address To"]
+    }
+
+    setErrors( errorFields );
+
+    console.log("errorFields: ", errorFields);
+
+    if ( errorFields.length > 0 ){
+      setErrorExists( "Missing required fields" );
+    } else {
+      if ( props.activities.find( d => d.dateId === ev.target.dateId.value &&
+        d.activityName.toLowerCase() === ev.target.activityName.value.toLowerCase() ) ){
+          setErrorExists( "Activity exists" );
+          // alert("Same activity was found");
+          // return;
+        } else{
+          setErrorExists( "" );
+          handleSubmit( ev );
+        }
+      }
+  };
+
   return(
     <div>
+      <div className="search-results-invalid">
+        {
+          errorExists.length > 0
+          &&
+          <p>{ errorExists }:</p>
+        }
+        <ul>
+        {
+          errors.length > 0
+          &&
+            errors.map( (error, index ) =>
+              <li key={ index }>{ error }</li>
+            )
+        }
+        </ul>
+      </div>
+
       <div className="search-results">
-        <form onSubmit={ handleSubmit } >
+
+        <form onSubmit={ handleValidationSubmit } >
           <input type="date" name="dateId" min={ minDate() } defaultValue={ minDate() } />
           <input type="time" name="arriveBy" placeholder="Arrive By (hhmm)" />
           <input type="text" name="activityName" placeholder="Activity" />
@@ -164,3 +224,7 @@ function Activities( props ) {
 }; // Activities
 
 export default Activities;
+
+/*
+<span style={{ color: "red" }}>{errors["activityName"]}</span>
+*/
