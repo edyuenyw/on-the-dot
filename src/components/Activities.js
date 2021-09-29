@@ -53,8 +53,9 @@ function Activities( props ) {
 
   useEffect( () => {
     // console.log("Activities.useEffect() is running: ", props);
-    setErrors({});
-    setErrorExists("");
+    setErrors( {} );
+    setErrorExists( "" );
+    setActivities( [] );
     performSearch( params.query );
 
   }, [ params.query ] );
@@ -153,10 +154,10 @@ function Activities( props ) {
     <div>
 
       <GoogleMapReact
-      onGoogleApiLoaded={ ({map, maps}) => { setGmap({map, maps}) }  /* get the instances of the underlying Gmap objects, needed for adding a Circle later on in performSearch()  */ }
-      bootstrapURLKeys={{ key: GMAPS_API_KEY }}
-      defaultCenter={ {lat: 19.168802, lng: 99.895430} /* Thailand... why not */ }
-      defaultZoom={ 7 }
+        onGoogleApiLoaded={ ({map, maps}) => { setGmap({map, maps}) }  /* get the instances of the underlying Gmap objects, needed for adding a Circle later on in performSearch()  */ }
+        bootstrapURLKeys={{ key: GMAPS_API_KEY }}
+        defaultCenter={ {lat: 19.168802, lng: 99.895430} /* Thailand... why not */ }
+        defaultZoom={ 7 }
       >
       </GoogleMapReact>
 
@@ -193,7 +194,7 @@ function Activities( props ) {
           <ul className="row">
           {
             activities.length > 0
-            &&
+            ?
             activities.map( activity =>
 
               <li key={ activity.dateId + activity.activityName }   >
@@ -218,8 +219,9 @@ function Activities( props ) {
                   </div>
                 </Link>
               </li>
-
             )
+            :
+            <p>Activity list is empty for '{ params.query }'. Start adding it.</p>
           }
           </ul>
 
@@ -229,7 +231,3 @@ function Activities( props ) {
 }; // Activities
 
 export default Activities;
-
-/*
-<span style={{ color: "red" }}>{errors["activityName"]}</span>
-*/

@@ -10,6 +10,7 @@ function Tasks( props ) {
   const params = useParams();
 
   useEffect( () => {
+    setTasks( [] );
 
     const taskResults = props.tasks.filter(
       task => task.date === params.dateId
@@ -37,7 +38,7 @@ function Tasks( props ) {
       setErrorExists( "Missing required fields" );
     } else {
       if ( ev.target.taskName.value.length > 0 && !isNaN( parseInt( ev.target.duration.value ) ) ) {
-        console.log("adding new tasks");
+        // console.log("adding new tasks");
         const theData = {
           id: Date.now(),
           activityName: params.query,
@@ -106,7 +107,7 @@ function Tasks( props ) {
       <ul className="row">
         {
           tasks.length > 0
-          &&
+          ?
           tasks.map( (task) =>
             <li className="tasks-card" key={ task.id } >
               <div className="tasks-labels">
@@ -121,6 +122,8 @@ function Tasks( props ) {
               </div>
             </li>
           )
+          :
+          <p>Task list is empty for '{ params.query }'. Start adding it.</p>
         }
       </ul>
 

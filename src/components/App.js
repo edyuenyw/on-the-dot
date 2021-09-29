@@ -35,8 +35,7 @@ function App() {
           <div className="App-logo">on-the-dot...</div>
             <ul className="nav-link">
               <div className="menu">
-                  <li><Link to="/">Home</Link></li>
-                  <li><Link to="/activities">Activities</Link></li>
+                  <li><Link to="/">Activities</Link></li>
                   <li><Link to="/tasks">Tasks</Link></li>
               </div>
             </ul>
@@ -45,8 +44,7 @@ function App() {
 
         <Switch>
 
-          <Route exact path="/"/>
-          <Route exact path="/activities" component={ ActivitiesSearch } />
+          <Route exact path="/" component={ ActivitiesSearch } />
           <Route exact path="/activities/search/:query" >
             <Activities
               activities={ activities }
@@ -78,13 +76,3 @@ function App() {
 }
 
 export default App;
-
-
-/*
-// TODO:
-&nbsp; | &nbsp;
-<Link to="/distance">Distance</Link>
-  </Route>
-  <Route exact path="/distance" component={ Distance } />
-
-*/
