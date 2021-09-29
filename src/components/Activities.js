@@ -12,6 +12,7 @@ function Activities( props ) {
   const [ activities, setActivities ] = useState( [] );
   const [ errors, setErrors ] = useState( {} );
   const [ errorExists, setErrorExists ] = useState( "" );
+  const [ invalidDuration, setInvalidDuration ] = useState( "" );
 
   const params = useParams();
 
@@ -19,8 +20,8 @@ function Activities( props ) {
     // console.log("performSearch: ", props.activities);
     const searchTerm = searchText.toLowerCase();
 
-    const searchResults = () => {
-      const activity = props.activities.filter( a => a.activityName.toLowerCase().includes(searchTerm) );
+    // const searchResults = () => {
+      const activity = props.activities.filter( a => a.activityName.toLowerCase() === searchTerm );
       if ( activity.length > 0 ){
         // console.log("activity: ", activity);
 
@@ -46,17 +47,22 @@ function Activities( props ) {
         });
       }
       return activity;
-    }
+    // }
 
-    setActivities( searchResults );
+    // setActivities( searchResults );
   };
 
   useEffect( () => {
-    // console.log("Activities.useEffect() is running: ", props);
+    // console.log("Activities.useEffect() is running handleClick: ", handleClick);
     setErrors( {} );
     setErrorExists( "" );
     setActivities( [] );
-    performSearch( params.query );
+    setInvalidDuration( "" );
+
+    // performSearch( params.query );
+    const results = performSearch( params.query );
+    // console.log(results);
+    setActivities( results );
 
   }, [ params.query ] );
 
@@ -75,6 +81,10 @@ function Activities( props ) {
       function( response, status ){
         if (status !== gmap.maps.DistanceMatrixStatus.OK) {
           alert('Error was: ' + status);
+        }
+
+        if ( response.rows[0].elements[0].status === "NOT_FOUND" ){
+          setInvalidDuration( "Unable to calculation duration. Unknown destinations." )
         } else {
           // console.log( response );
 
@@ -96,6 +106,7 @@ function Activities( props ) {
 
           props.setActivities([ ...props.activities, theData ]);
           setActivities([ ...activities, theData ]);
+          setInvalidDuration( "" );
         }
       }
     )
@@ -176,6 +187,9 @@ function Activities( props ) {
             )
         }
         </ul>
+        {
+          invalidDuration.length > 0 && <p>{ invalidDuration }</p>
+        }
       </div>
 
       <div className="search-results">
@@ -210,10 +224,19 @@ function Activities( props ) {
 
                     <div className="txt-label">
                       <label>
-                        Depart: { activity.departBy }
+                        Depart: { activity.addressFrom }
                       </label>
                       <label>
-                        Arrive: { activity.arriveBy }
+                        Arrive: { activity.addressTo }
+                      </label>
+                    </div>
+
+                    <div className="txt-label">
+                      <label>
+                        At: { activity.departBy }
+                      </label>
+                      <label>
+                        At: { activity.arriveBy }
                       </label>
                     </div>
                   </div>

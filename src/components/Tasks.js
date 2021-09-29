@@ -10,10 +10,12 @@ function Tasks( props ) {
   const params = useParams();
 
   useEffect( () => {
+    // console.log(props.tasks);
+    // console.log(params);
     setTasks( [] );
 
-    const taskResults = props.tasks.filter(
-      task => task.date === params.dateId
+    const taskResults = props.tasks.filter( task =>
+      task.date === params.dateId && task.activityName.toLowerCase() === params.query.toLowerCase()
     );
 
     setTasks( taskResults );
