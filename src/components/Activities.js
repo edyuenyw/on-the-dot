@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-const google = window.google;
+import GoogleMapReact from 'google-map-react';
+
+const GMAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
 function Activities( props ) {
 
+  const [ gmap, setGmap ] = useState( null );
   const [ activities, setActivities ] = useState( [] );
   const [ errors, setErrors ] = useState( {} );
   const [ errorExists, setErrorExists ] = useState( "" );
@@ -58,26 +61,21 @@ function Activities( props ) {
 
 
   const handleSubmit = (ev) => {
-    // ev.preventDefault();
-    // console.log("Activities.handleSubmit() clicked.");
-    // console.log("input arrive time: ", ev.target.arriveBy.value);
 
-    console.log("handleSubmit errors: ", errors);
-
-    const service = new google.maps.DistanceMatrixService();
+    const service = new gmap.maps.DistanceMatrixService();
 
     service.getDistanceMatrix(
       {
         origins: [ ev.target.addressFrom.value ],
         destinations: [ ev.target.addressTo.value ],
         region: "AU",
-        travelMode: google.maps.TravelMode.DRIVING
+        travelMode: gmap.maps.TravelMode.DRIVING
       },
       function( response, status ){
-        if (status !== google.maps.DistanceMatrixStatus.OK) {
+        if (status !== gmap.maps.DistanceMatrixStatus.OK) {
           alert('Error was: ' + status);
         } else {
-          console.log( response );
+          // console.log( response );
 
           const toMinutes = (Number(ev.target.arriveBy.value.split(':')[0]) * 60) +
                             Number(ev.target.arriveBy.value.split(':')[1]) -
@@ -115,7 +113,6 @@ function Activities( props ) {
   };
 
   const handleValidationSubmit = (ev) => {
-    console.log("ev: ", ev);
     ev.preventDefault();
 
     let errorFields = [];
@@ -137,8 +134,6 @@ function Activities( props ) {
 
     setErrors( errorFields );
 
-    console.log("errorFields: ", errorFields);
-
     if ( errorFields.length > 0 ){
       setErrorExists( "Missing required fields" );
     } else {
@@ -156,6 +151,15 @@ function Activities( props ) {
 
   return(
     <div>
+
+      <GoogleMapReact
+      onGoogleApiLoaded={ ({map, maps}) => { setGmap({map, maps}) }  /* get the instances of the underlying Gmap objects, needed for adding a Circle later on in performSearch()  */ }
+      bootstrapURLKeys={{ key: GMAPS_API_KEY }}
+      defaultCenter={ {lat: 19.168802, lng: 99.895430} /* Thailand... why not */ }
+      defaultZoom={ 7 }
+      >
+      </GoogleMapReact>
+
       <div className="search-results-invalid">
         {
           errorExists.length > 0
@@ -183,6 +187,7 @@ function Activities( props ) {
           <input type="text" name="addressTo" placeholder="Address To" />
           <button>New</button>
         </form>
+
       </div>
 
           <ul className="row">
