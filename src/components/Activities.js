@@ -83,8 +83,8 @@ function Activities( props ) {
           alert('Error was: ' + status);
         }
 
-        if ( response.rows[0].elements[0].status === "NOT_FOUND" ){
-          setInvalidDuration( "Unable to calculation duration. Unknown destinations." )
+        if ( response.rows[0].elements[0].status !== "OK" ){ // // TODO:  change to !== 'OK'
+          setInvalidDuration( "Unable to calculate duration due to unknown routes or routes not found." )
         } else {
           // console.log( response );
 
