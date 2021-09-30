@@ -160,10 +160,6 @@ li {
   /* border:solid; */
 }
 
-.activities-card:hover {
-  cursor: pointer;
-}
-
 .tasks-card {
  box-sizing: border-box;
  border-radius: 5px;
@@ -181,7 +177,7 @@ li {
   color: #f7f7f7;
 }
 
-.txt-label {
+.txt-label, .tasks-labels {
   display: flex;
   justify-content: space-between;
   font-size: 18px;
@@ -189,12 +185,24 @@ li {
   color: #f7f7f7;
 }
 
+.txt-label:hover {
+  cursor: pointer;
+}
+
 .txt-label-title, .tasks-title {
   font-size: 36px;
   color: #f7f7f7;
 }
 
-.txt-label button, .tasks-title button {
+.txt-label-title:hover {
+  cursor: pointer;
+}
+
+.txt-subLabel:hover {
+  cursor: pointer;
+}
+
+.txt-label button, .tasks-labels button {
   background: #dddddd;
   width: 20px;
   border: none;

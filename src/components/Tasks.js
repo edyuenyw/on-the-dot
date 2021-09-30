@@ -112,12 +112,12 @@ function Tasks( props ) {
           ?
           tasks.map( (task) =>
             <li className="tasks-card" key={ task.id } >
-              <div className="tasks-labels">
+              <div>
                 <div className="tasks-title">
                   { task.name }
                 </div>
 
-                <div className="txt-label">
+                <div className="tasks-labels">
                   Duration: { task.duration } minutes
                   <button onClick={ () => handleDelete(task.id) }>{ task.deleted ? "+" : "-" }</button>
                 </div>

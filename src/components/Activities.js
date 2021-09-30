@@ -21,7 +21,7 @@ function Activities( props ) {
     const searchTerm = searchText.toLowerCase();
 
     // const searchResults = () => {
-      const activity = props.activities.filter( a => a.activityName.toLowerCase() === searchTerm );
+      const activity = props.activities.filter( a => ( a.activityName.toLowerCase() === searchTerm && !a.deleted ) );
       if ( activity.length > 0 ){
         // console.log("activity: ", activity);
 
@@ -83,7 +83,7 @@ function Activities( props ) {
           alert('Error was: ' + status);
         }
 
-        if ( response.rows[0].elements[0].status !== "OK" ){ // // TODO:  change to !== 'OK'
+        if ( response.rows[0].elements[0].status !== "OK" ){
           setInvalidDuration( "Unable to calculate duration due to unknown routes or routes not found." )
         } else {
           // console.log( response );
@@ -95,13 +95,15 @@ function Activities( props ) {
           const minutes = toMinutes % 60;
 
           const theData = {
+            id: Date.now(),
             dateId: ev.target.dateId.value,
             activityName: ev.target.activityName.value,
             addressFrom: response.originAddresses[0].split(',')[0],
             addressTo: response.destinationAddresses[0].split(',')[0],
             arriveBy: ev.target.arriveBy.value,
             departBy: `${hour}:${minutes}`,
-            duration: response.rows[0].elements[0].duration.value
+            duration: response.rows[0].elements[0].duration.value,
+            deleted: false
           };
 
           props.setActivities([ ...props.activities, theData ]);
@@ -150,7 +152,8 @@ function Activities( props ) {
       setErrorExists( "Missing required fields" );
     } else {
       if ( props.activities.find( d => d.dateId === ev.target.dateId.value &&
-        d.activityName.toLowerCase() === ev.target.activityName.value.toLowerCase() ) ){
+        d.activityName.toLowerCase() === ev.target.activityName.value.toLowerCase() &&
+        !d.deleted ) ){
           setErrorExists( "Activity exists" );
           // alert("Same activity was found");
           // return;
@@ -159,6 +162,20 @@ function Activities( props ) {
           handleSubmit( ev );
         }
       }
+  };
+
+  const handleDelete = ( id ) => {
+    // console.log( props.activities );
+
+    props.activities.map( activity => {
+      if ( activity.id === id ){
+        activity.deleted = !activity.deleted;
+      }
+    } );
+
+    // props.setActivities( delResults );
+    setActivities( performSearch( params.query ) );
+
   };
 
   return(
@@ -211,36 +228,37 @@ function Activities( props ) {
             ?
             activities.map( activity =>
 
-              <li key={ activity.dateId + activity.activityName }   >
-                <Link to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`} >
+              <li key={ activity.id }   >
                   <div className="activities-card">
-                    <label className="txt-label">
+                    <div className="txt-label">
                       { activity.dateId }
-                    </label>
-
-                    <label className="txt-label-title">
-                      { activity.activityName }
-                    </label>
-
-                    <div className="txt-label">
-                      <label>
-                        Depart: { activity.addressFrom }
-                      </label>
-                      <label>
-                        Arrive: { activity.addressTo }
-                      </label>
+                      <button onClick={ () => handleDelete( activity.id ) }>{ activity.deleted ? "+" : "-" }</button>
                     </div>
+                    <Link to={`/activities/search/${ activity.activityName.toLowerCase() }/${ activity.dateId }`} >
+                      <label className="txt-label-title">
+                        { activity.activityName }
+                      </label>
 
-                    <div className="txt-label">
-                      <label>
-                        At: { activity.departBy }
-                      </label>
-                      <label>
-                        At: { activity.arriveBy }
-                      </label>
-                    </div>
+                      <div className="txt-label">
+                        <label className="txt-subLabel">
+                          Depart: { activity.addressFrom }
+                        </label>
+                        <label className="txt-subLabel">
+                          Arrive: { activity.addressTo }
+                        </label>
+                      </div>
+
+                      <div className="txt-label">
+                        <label className="txt-subLabel">
+                          At: { activity.departBy }
+                        </label>
+                        <label className="txt-subLabel">
+                          At: { activity.arriveBy }
+                        </label>
+                      </div>
+                    </Link>
                   </div>
-                </Link>
+
               </li>
             )
             :
