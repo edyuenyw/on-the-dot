@@ -28,3 +28,5 @@ Each activity has its own task lists. Each task created/deleted will determine n
 
 ## Backlog and other Issues
 * Editing details of existing cards.
+
+## Change GitHub README.md
